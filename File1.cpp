@@ -15,29 +15,55 @@
 #include <cmath>
 
 #include<NTFS.cpp>
-#include<FAT.cpp>
+#include<FAT32.cpp>
 
+void ViewBuffer(FileSystem file){
+	unsigned int numCluster;
+    byte *dataBuffer = new byte[file.clusterSize];
+	std::wcout<<L"Введите номер кластера для просмотра: ";
+	std::wcin>>numCluster;
+	if(numCluster<=file.clusterSize)
+	{file.ReedCluster(numCluster,dataBuffer);
+		for(int i=0;i<file.clusterSize; i++){
+			 std::wcout<<std::hex<<dataBuffer[i]<<" ";
+			 if(i%15==0 && i!=0)
+				std::wcout<<std::endl;
+		}
+	}
+
+	delete[] dataBuffer;
+}
 
 int main()
 {
-    setlocale (LC_ALL, ".866");
+	setlocale (LC_ALL, ".866");
+	int flag;
 
-	wchar_t *fileName =L"\\\\.\\C:";
+	std::wcout<<L"1. Тест ФС NTFS на диске C:\n";
+	std::wcout<<L"2. Тест ФС FAT32 на диске D:\nВыбор: ";
+	std::wcin>>flag;
 
+	if(flag==1){
+
+	wchar_t *fileName=L"\\\\.\\C:";
 	NTFS file=NTFS(fileName);
 	file.ViewInfo();
-	byte *dataBuffer = new byte[file.clusterSize];
-	file.ReedCluster(2,dataBuffer);
+	ViewBuffer(file);
 
-	for(int i=0; i <file.clusterSize;i++){
-	std::wcout<<std::hex<<dataBuffer[i]<<" ";
-	if(i%15==0 && i!=0)
-    	std::wcout<<std::endl;
 	}
+	else if(flag==2){
+
+	wchar_t *fileName=L"\\\\.\\D:";
+	FAT32 file=FAT32(fileName);
+	file.ViewInfo();
+	ViewBuffer(file);
+	}
+	else{
+	 std::wcout<<L"Ошибка выбора.\n";
+     system("pause");
+     return 0;
+    }
 
 	system("pause");
-
-	delete[] dataBuffer;
-
 	return 0;
 }
