@@ -13,8 +13,11 @@ typedef struct
 	byte Text[0x0B];
 	byte BPS[2];
 	byte SPC;
-    byte Skip[18];
+	byte Rezerv[2];
+	byte FAT;
+	byte Skip[15];
 	byte TotalSector[4];
+	byte FATSize[4];
 
 
 } FAT32_BootRecord;

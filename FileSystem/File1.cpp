@@ -47,7 +47,7 @@ int main()
 
 	wchar_t *fileName=L"\\\\.\\C:";
 	NTFS file=NTFS(fileName);
-	file.ViewInfo();
+	//file.ViewInfo();
 	ViewBuffer(file);
 
 	}
@@ -55,7 +55,7 @@ int main()
 
 	wchar_t *fileName=L"\\\\.\\D:";
 	FAT32 file=FAT32(fileName);
-	file.ViewInfo();
+	//file.ViewInfo();
 	ViewBuffer(file);
 	}
 	else{

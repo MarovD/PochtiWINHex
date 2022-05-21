@@ -4,17 +4,31 @@ protected:
 
 	HANDLE fileHander;
 
-	long GetDec(byte vBootRecord[],int size)
-	{
-		long sum=0;
-		for (int i = 0; i < size; i++)
-		{
-			sum+=vBootRecord[i]*std::pow(16,i*2);
-		}
-		return sum;
-	}
+	long GetDec(byte vBootRecord[],int size);
+	bool ReedBootRecord(wchar_t* path, byte *dataBuffer);
 
-    void ReedBootRecord(wchar_t* path, byte *dataBuffer){
+
+public:
+	unsigned long long size;
+	unsigned long long countCluster;
+	int clusterSize;
+	bool ReedCluster(int number, BYTE *outBuffer);
+	void ViewInfo(TLabel *Label);
+
+};
+
+
+long FileSystem::GetDec(byte vBootRecord[],int size){
+
+	long sum=0;
+	for (int i = 0; i < size; i++)
+	{
+		sum+=vBootRecord[i]*std::pow(16,i*2);
+	}
+	return sum;
+}
+
+bool FileSystem::ReedBootRecord(wchar_t* path, byte *dataBuffer){
 
     fileHander=CreateFileW(path,
 	GENERIC_READ,
@@ -26,9 +40,9 @@ protected:
 
 	if(fileHander == INVALID_HANDLE_VALUE)
 	{
-		std::wcout<<L"Ошибка чтения файла. Используйте права администратора.\n";
+		SendMessageW(L"Ошибка чтения файла. Используйте права администратора.");
 		CloseHandle(fileHander);
-		system("pause");
+		return false;
 	}
 
 	LARGE_INTEGER sectorOffset;
@@ -40,6 +54,7 @@ protected:
 	 if(currentPosition != sectorOffset.LowPart)  {
 		 CloseHandle(fileHander);
 		 delete[] dataBuffer;
+		 return false;
 	 }
 
 	 DWORD bytesToRead=512;
@@ -49,30 +64,20 @@ protected:
 	 if(readResult == false || bytesRead != bytesToRead){
 		CloseHandle(fileHander);
 		delete[] dataBuffer;
+		return false;
 	 }
-
+	 return true;
 	}
 
-
-public:
-	unsigned long long size;
-	unsigned long long countCluster;
-	int clusterSize;
-
-	void ViewInfo(){
-	std::wcout<<L"Размер: "<< size<<L" байт"<<std::endl;
-	std::wcout<<L"Количество кластеров: "<< countCluster<<std::endl;
-	std::wcout<<L"Размер кластера: "<< clusterSize<<L" байт"<<std::endl;
-	}
-
-    void ReedCluster(int number, BYTE *outBuffer){
+bool FileSystem::ReedCluster(int number, BYTE *outBuffer){
 	LARGE_INTEGER sectorOffset;
 	sectorOffset.QuadPart=clusterSize*number;
 
 	unsigned long currentPosition = SetFilePointer(fileHander,sectorOffset.LowPart,&sectorOffset.HighPart ,FILE_BEGIN);
 
 	 if(currentPosition != sectorOffset.LowPart)  {
-	 std::wcout<<L"Ошибка установки курсора.\n";
+	 SendMessageW(L"Ошибка установки курсора.");
+	 return false;
 	 }
 
 	 DWORD bytesToRead=clusterSize;
@@ -80,8 +85,21 @@ public:
 	 bool readResult = ReadFile(fileHander,outBuffer,bytesToRead,&bytesRead,NULL);
 
 	 if(readResult == false || bytesRead != bytesToRead){
-		 std::wcout<<L"Ошибка чтения кластера.\n";
+		 SendMessageW(L"Ошибка чтения кластера.");
+		 return false;
 	 }
+     return true;
 	}
 
-};
+void FileSystem::ViewInfo(TLabel *Label){
+
+		Label->Caption="Размер: ";
+		Label->Caption+=size;
+		Label->Caption+="\nКоличество кластеров: ";
+		Label->Caption+=countCluster;
+		Label->Caption+="\nРазмер кластера: ";
+		Label->Caption+=clusterSize;
+	}
+
+
+
