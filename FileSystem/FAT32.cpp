@@ -1,12 +1,5 @@
 #include <iostream>
-#include<FAT32.h>
-
-class FAT32 : public FileSystem
-{
-public:
-	FAT32(wchar_t* path);
-	~FAT32();
-};
+#include "FAT32.h"
 
 FAT32::FAT32(wchar_t* path)
 {

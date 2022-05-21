@@ -3,10 +3,10 @@
 #include <vcl.h>
 #pragma hdrstop
 
-
 #include "Unit1.h"
 #include "FileCtrl.hpp"
-#include <NTFS.cpp>
+
+#include "Factory.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "VirtualTrees"
@@ -45,8 +45,10 @@ void __fastcall TForm1::Edit1DblClick(TObject *Sender)
 
 void __fastcall TForm1::Button2Click(TObject *Sender)
 {
+
 	if(Edit1->Text !="")
 	{
+        Factory Factory;
 		UnicodeString str1="\\\\.\\";
 		UnicodeString str2=Edit1->Text;
 
@@ -56,10 +58,11 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 		UnicodeString str3=str1+str2;
 
 		wchar_t *fileName=str3.t_str();
-		File=NTFS(fileName);
+		File=Factory.CreateFS(fileName);
 
 		File.ViewInfo(Label1);
 	}
 }
 //---------------------------------------------------------------------------
+
 

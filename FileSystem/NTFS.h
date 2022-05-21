@@ -1,9 +1,14 @@
 #ifdef _WIN32
 #include <tchar.h>
 #include <windows.h>
+#include "FileSystem.h"
 
-
-#include<FileSystem.h>
+class NTFS : public FileSystem
+{
+public:
+	NTFS(wchar_t* path);
+	~NTFS();
+};
 
 #pragma pack(push,1)
 

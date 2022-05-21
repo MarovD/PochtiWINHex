@@ -15,11 +15,17 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 415
-    Top = 8
-    Width = 27
-    Height = 13
+    Left = 431
+    Top = 29
+    Width = 50
+    Height = 24
     Caption = #1048#1085#1092#1086
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
   end
   object Edit1: TEdit
     Left = 19
@@ -67,6 +73,7 @@ object Form1: TForm1
     Top = 128
     Width = 510
     Height = 383
+    DefaultNodeHeight = 26
     Header.AutoSizeIndex = 0
     Header.MainColumn = -1
     TabOrder = 4

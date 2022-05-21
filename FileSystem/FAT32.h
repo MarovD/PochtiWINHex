@@ -2,8 +2,14 @@
 #include <tchar.h>
 #include <windows.h>
 
-#include<FileSystem.h>
+#include "FileSystem.h"
 
+class FAT32 : public FileSystem
+{
+public:
+	FAT32(wchar_t* path);
+	~FAT32();
+};
 
 #pragma pack(push,1)
 

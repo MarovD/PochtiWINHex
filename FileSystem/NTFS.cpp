@@ -1,15 +1,5 @@
 ﻿#include <iostream>
-#include<NTFS.h>
-
-
-
-//EB 52 90 4E 54 46 53
-class NTFS : public FileSystem
-{
-public:
-	NTFS(wchar_t* path);
-	~NTFS();
-};
+#include "NTFS.h"
 
 NTFS::NTFS(wchar_t* path)
 	{
