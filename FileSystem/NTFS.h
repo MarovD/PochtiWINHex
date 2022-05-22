@@ -7,7 +7,6 @@ class NTFS : public FileSystem
 {
 public:
 	NTFS(wchar_t* path);
-	~NTFS();
 };
 
 #pragma pack(push,1)

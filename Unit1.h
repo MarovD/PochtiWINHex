@@ -31,8 +31,10 @@ __published:	// IDE-managed Components
 	TRadioButton *RadioButton2;
 	TRadioGroup *RadioGroup1;
 	TButton *Button2;
+	TLabel *Label2;
 	void __fastcall Edit1DblClick(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);

@@ -1,5 +1,6 @@
 #pragma once
 #include "Unit1.h"
+
 class FileSystem {
 protected:
 
@@ -13,7 +14,7 @@ public:
 
     bool ReedBootRecord(wchar_t* path,BYTE *dataBuffer);
     bool ReedFileHander(wchar_t* path);
-	bool ReedCluster(int number, BYTE *outBuffer);
+	bool ReedCluster(unsigned long number, BYTE *dataBuffer);
 	void ViewInfo(TLabel *Label);
 
 };

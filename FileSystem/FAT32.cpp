@@ -26,11 +26,6 @@ FAT32::FAT32(wchar_t* path)
 	delete[] dataBuffer;
 }
 
-FAT32::~FAT32()
-{
-	 CloseHandle(fileHander);
-}
-
 
 
 

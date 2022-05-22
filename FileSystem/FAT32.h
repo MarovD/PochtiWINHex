@@ -8,7 +8,6 @@ class FAT32 : public FileSystem
 {
 public:
 	FAT32(wchar_t* path);
-	~FAT32();
 };
 
 #pragma pack(push,1)

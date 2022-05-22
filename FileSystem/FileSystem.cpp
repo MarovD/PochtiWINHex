@@ -10,6 +10,9 @@ long FileSystem::GetDec(byte vBootRecord[],int size){
 	return sum;
 }
 bool FileSystem::ReedBootRecord(wchar_t* path,BYTE *dataBuffer){
+	 if(fileHander!=NULL)
+        CloseHandle(fileHander);
+
 	 if(ReedFileHander(path))
 		if(ReedCluster(0,dataBuffer))
 			return true;
@@ -38,7 +41,7 @@ bool FileSystem::ReedFileHander(wchar_t* path){
 	 return true;
 	}
 
-bool FileSystem::ReedCluster(int number, BYTE *dataBuffer){
+bool FileSystem::ReedCluster(unsigned long number, BYTE *dataBuffer){
 
 	LARGE_INTEGER sectorOffset;
 	sectorOffset.QuadPart=clusterSize*number;

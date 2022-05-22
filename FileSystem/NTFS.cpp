@@ -16,13 +16,10 @@ NTFS::NTFS(wchar_t* path)
 		clusterSize=BPS*SPC;
 		countCluster=TotalSector/SPC;
 		size=countCluster*clusterSize;
+
 	}
 
 	delete[] dataBuffer;
 	}
 
-NTFS::~NTFS()
-{
- CloseHandle(fileHander);
-}
 
