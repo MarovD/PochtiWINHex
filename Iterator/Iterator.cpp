@@ -1,9 +1,11 @@
 #include <iostream>
 #include "Iterator.h"
 
+     Iterator::Iterator(){}
+
+
 	Iterator::Iterator(FileSystem file){
 	 File=file;
-	 byte *dataBuffer = new byte[File.clusterSize];
 	 end=File.countCluster;
      First();
 	 End();
@@ -14,6 +16,11 @@
 		if (position<end)
 			Position=position;
 	}
+
+	unsigned int Iterator::GetPosition(){
+      return Position;
+	}
+
 
 	void Iterator::SetDone(unsigned long count){
 		if(Position+count<=end && count>0)

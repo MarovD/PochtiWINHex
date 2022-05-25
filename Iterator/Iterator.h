@@ -5,21 +5,24 @@
 
 class Iterator
 {
-private:
-    unsigned int Position;
+protected:
+	unsigned int Position;
 	unsigned long long Done;
 	unsigned long long end;
-    FileSystem File;
 public:
-
+	Iterator();
 	Iterator(FileSystem file);
+
+	FileSystem File;
+
 	void SetPosition(unsigned long position);
+    unsigned int GetPosition();
 	void SetDone(unsigned long count);
 	void First();
-    void End();
+	void End();
 	void Next();
 	bool IsDone();
-	bool GetCurrent(byte *dataBuffer);
+	virtual bool GetCurrent(byte *dataBuffer);
 };
 
 

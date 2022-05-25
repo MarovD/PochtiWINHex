@@ -11,7 +11,6 @@ class Factory
 public:
 	Factory();
 	FileSystem CreateFS(wchar_t* path);
-	~Factory();
 private:
 	FS DefinitionFS(byte *dataBuffer);
 };

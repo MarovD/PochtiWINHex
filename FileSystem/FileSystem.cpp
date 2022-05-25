@@ -11,7 +11,7 @@ long FileSystem::GetDec(byte vBootRecord[],int size){
 }
 bool FileSystem::ReedBootRecord(wchar_t* path,BYTE *dataBuffer){
 	 if(fileHander!=NULL)
-        CloseHandle(fileHander);
+        ClosedHandle();
 
 	 if(ReedFileHander(path))
 		if(ReedCluster(0,dataBuffer))
@@ -35,7 +35,7 @@ bool FileSystem::ReedFileHander(wchar_t* path){
 	if(fileHander == INVALID_HANDLE_VALUE)
 	{
 		ShowMessage(L"Ошибка чтения файла. Используйте права администратора.");
-		CloseHandle(fileHander);
+		ClosedHandle();
 		return false;
 	}
 	 return true;
@@ -66,11 +66,16 @@ bool FileSystem::ReedCluster(unsigned long number, BYTE *dataBuffer){
 
 void FileSystem::ViewInfo(TLabel *Label){
 
-		Label->Caption="Размер: ";
+		Label->Caption="Файловая система: ";
+		Label->Caption+=name;
+		Label->Caption+="\nРазмер: ";
 		Label->Caption+=size;
 		Label->Caption+="\nКоличество кластеров: ";
 		Label->Caption+=countCluster;
 		Label->Caption+="\nРазмер кластера: ";
 		Label->Caption+=clusterSize;
 	}
+void FileSystem::ClosedHandle(){
+    CloseHandle(fileHander);
+}
 

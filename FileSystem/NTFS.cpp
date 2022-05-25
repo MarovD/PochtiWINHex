@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include "NTFS.h"
+﻿#include "NTFS.h"
 
 NTFS::NTFS(wchar_t* path)
 	{
@@ -13,6 +12,7 @@ NTFS::NTFS(wchar_t* path)
 		int SPC=GetDec(&pNTFS_BootRecord->SPC,sizeof(pNTFS_BootRecord->SPC));
 		unsigned long long TotalSector=GetDec(pNTFS_BootRecord->TotalSector,sizeof(pNTFS_BootRecord->TotalSector));
 
+        name="NTFS";
 		clusterSize=BPS*SPC;
 		countCluster=TotalSector/SPC;
 		size=countCluster*clusterSize;

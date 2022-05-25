@@ -1,4 +1,3 @@
-#include <iostream>
 #include "FAT32.h"
 
 FAT32::FAT32(wchar_t* path)
@@ -18,7 +17,7 @@ FAT32::FAT32(wchar_t* path)
 		unsigned long long FATSize=GetDec(pFAT32_BootRecord->FATSize,sizeof(pFAT32_BootRecord->FATSize));
 
 
-
+        name="FAT32";
 		clusterSize=BPS*SPC;
 		countCluster=(TotalSector-Rezerv-FAT*FATSize)/SPC;
 		size=countCluster*clusterSize;

@@ -56,8 +56,3 @@ FS Factory::DefinitionFS(byte *dataBuffer)
 		return ENON;
 
 }
-
-Factory::~Factory()
-{
-
-}
