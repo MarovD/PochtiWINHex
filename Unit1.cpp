@@ -3,39 +3,41 @@
 #pragma hdrstop
 
 #include "Unit1.h"
+#include "Unit2.h"
+
 #include "FileCtrl.hpp"
 #include <sqlite3.h>
 #include <fstream>
 
 #include "Factory.h"
-#include "PassDecorator.h"
-#include "CheckSign.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "VirtualTrees"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 FileSystem File;
-Iterator iterator;
 char* db_name = "Databases.db";
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
-    VirtualStringTree1->NodeDataSize =sizeof(TreeNodeStruct);
+	VirtualStringTree1->NodeDataSize =sizeof(TreeNodeStruct);
+	myTread2=NULL;
+	Label3->Caption="При нажатии на кнопку поиск сигнатур\nпроизойдет перезапись файла Databases.db";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Edit1DblClick(TObject *Sender)
 {
 
-	if(RadioGroup1->ItemIndex==0)
+	if(FSReadingMode->ItemIndex==0)
 	{
 	String Dir = "c:\\";
 	if(SelectDirectory("Укажите путь к папке","",Dir))
 	Edit1->Text = Dir;
 	}
 
-	if(RadioGroup1->ItemIndex==1){
+	if(FSReadingMode->ItemIndex==1){
 	OpenDialog1->Execute();
 	Edit1->Text = OpenDialog1->FileName;
 	}
@@ -44,9 +46,6 @@ void __fastcall TForm1::Edit1DblClick(TObject *Sender)
 
 }
 //---------------------------------------------------------------------------
-
-
-
 void __fastcall TForm1::OpenFSButtonClick(TObject *Sender)
 {
 
@@ -64,23 +63,22 @@ void __fastcall TForm1::OpenFSButtonClick(TObject *Sender)
 		wchar_t *fileName=str3.t_str();
 		File=Factory.CreateFS(fileName);
 
-        RadioGroup2Click(Sender);
 		File.ViewInfo(Label1);
+        if(File.countCluster==0)
+			FindSignButton->Enabled=false;
+		else
+        	FindSignButton->Enabled=true;
 	}
 }
 //---------------------------------------------------------------------------
 
 
-void __fastcall TForm1::Button1Click(TObject *Sender)
+void __fastcall TForm1::FindSignButtonClick(TObject *Sender)
 {
-	VirtualStringTree1->Clear();
-	VirtualStringTree1->BeginUpdate();
-
-	ofstream out(db_name);
+    ofstream out(db_name);
 	out.close();
 
 	AnsiString str = "CREATE TABLE FILE (ID INT NOT NULL, NAME TEXT NOT NULL);";
-
 	sqlite3 *db;
 
 	if ( sqlite3_open(db_name,&db))
@@ -88,65 +86,18 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 		ShowMessage("Can't open database: " + (String)sqlite3_errmsg(db));
 		sqlite3_close(db);
 	}
-
 	sqlite3_exec(db, str.c_str(), NULL, 0,NULL);
 
-	if(File.countCluster!=0)
-	{
-		if(Edit2->Text=="")
-			iterator.First();
-		else
-			iterator.SetPosition(StrToLong(Edit2->Text));
-
-		if(Edit3->Text=="")
-			iterator.End();
-		else
-			iterator.SetDone(StrToLong(Edit3->Text));
-
-		byte *dataBuffer = new byte[File.clusterSize];
-		CheckSign check;
-		for(;!iterator.IsDone();iterator.Next()){
-		 if(iterator.GetCurrent(dataBuffer))
-			{
-				UnicodeString type=check.CheckSigns(dataBuffer);
-			 if(type!="NON")
-			 {
-				PVirtualNode entryNode = VirtualStringTree1->AddChild(VirtualStringTree1->RootNode);
-				TreeNodeStruct *nodeData = (TreeNodeStruct*) VirtualStringTree1->GetNodeData(entryNode);
-				nodeData->clusterNum = iterator.GetPosition();
-				nodeData->name=type;
-
-				AnsiString sql="INSERT INTO FILE (ID, NAME) VALUES ("+(AnsiString)nodeData->clusterNum+", \""+nodeData->name+"\" );";
-                sqlite3_exec(db, sql.c_str(), NULL, 0,NULL);
-			 }
-
-			 }
-		}
-
-
-		delete[] dataBuffer;
-	}
-    sqlite3_close(db);
-    VirtualStringTree1->EndUpdate();
+	myTread2=new Thread2(File,false);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormDestroy(TObject *Sender)
 {
+	if(myTread2!=NULL)
+		myTread2->Terminate();
 	File.ClosedHandle();
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TForm1::RadioGroup2Click(TObject *Sender)
-{
-	if(RadioGroup2->ItemIndex==0)
-	iterator=Iterator(File);
-
-	if(RadioGroup2->ItemIndex==1)
-    iterator=PassDecorator(iterator);
-
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TForm1::VirtualStringTree1GetText(TBaseVirtualTree *Sender, PVirtualNode Node,
           TColumnIndex Column, TVSTTextType TextType, UnicodeString &CellText)
 
@@ -168,7 +119,7 @@ void __fastcall TForm1::VirtualStringTree1GetText(TBaseVirtualTree *Sender, PVir
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Button3Click(TObject *Sender)
+void __fastcall TForm1::DeliteStringButtonClick(TObject *Sender)
 {
 
 	PVirtualNode numstr =  VirtualStringTree1->GetFirstSelected();
@@ -239,7 +190,7 @@ void TForm1::ReloadViewDB()
 }
 
 
-void __fastcall TForm1::Button4Click(TObject *Sender)
+void __fastcall TForm1::ClearDBButtonClick(TObject *Sender)
 {
 		 AnsiString str="DELETE from FILE;";
 		 WorkToDB(str);

@@ -14,7 +14,7 @@ Iterator Diterator;
 
 	bool PassDecorator::GetCurrent(byte *dataBuffer){
 	if(Diterator.GetCurrent(dataBuffer))
-		{   //for(int i=0;i<sizeof(dataBuffer);i++)
+		{
             for(int i=0;i<512;i++)
 			{
 			if(dataBuffer[i]!=0)

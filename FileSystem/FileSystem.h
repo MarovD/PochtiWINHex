@@ -16,7 +16,7 @@ public:
 
     bool ReedBootRecord(wchar_t* path,BYTE *dataBuffer);
     bool ReedFileHander(wchar_t* path);
-	bool ReedCluster(unsigned long number, BYTE *dataBuffer);
+	bool ReedCluster(unsigned long long number, BYTE *dataBuffer);
 	void ViewInfo(TLabel *Label);
 	void ClosedHandle();
 

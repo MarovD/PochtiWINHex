@@ -41,12 +41,11 @@ bool FileSystem::ReedFileHander(wchar_t* path){
 	 return true;
 	}
 
-bool FileSystem::ReedCluster(unsigned long number, BYTE *dataBuffer){
+bool FileSystem::ReedCluster(unsigned long long number, BYTE *dataBuffer){
 
 	LARGE_INTEGER sectorOffset;
-	sectorOffset.QuadPart=clusterSize*number;
-
-	unsigned long currentPosition = SetFilePointer(fileHander,sectorOffset.LowPart,&sectorOffset.HighPart ,FILE_BEGIN);
+	sectorOffset.QuadPart=clusterSize*number;;
+	unsigned long long currentPosition = SetFilePointer(fileHander,sectorOffset.LowPart,&sectorOffset.HighPart ,FILE_BEGIN);
 
 	 if(currentPosition != sectorOffset.LowPart)  {
 	 ShowMessage(L"Ошибка установки курсора.");
