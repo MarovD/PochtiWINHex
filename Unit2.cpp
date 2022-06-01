@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include <sqlite3.h>
+#include <typeinfo>
 
 #include "Unit2.h"
 #include "Unit1.h"

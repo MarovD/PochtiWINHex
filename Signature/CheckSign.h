@@ -8,7 +8,6 @@ public:
 	UnicodeString CheckSigns(BYTE *dataBuffer);
 private:
 	bool Check(int pos,BYTE sign[],int length,BYTE *dataBuffer);
-    bool TEST(BYTE *dataBuffer);
 };
 
 #endif

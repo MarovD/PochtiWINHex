@@ -40,10 +40,7 @@
 	}
 
 	bool Iterator::IsDone(){
-	if(Position>Done)
-	return true;
-	else
-    return false;
+	return(Position>Done);
 	}
 
 	bool Iterator::GetCurrent(byte *dataBuffer){

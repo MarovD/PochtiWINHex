@@ -13,6 +13,7 @@ Iterator Diterator;
 
 
 	bool PassDecorator::GetCurrent(byte *dataBuffer){
+    ShowMessage("123");
 	if(Diterator.GetCurrent(dataBuffer))
 		{
             for(int i=0;i<512;i++)
