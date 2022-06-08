@@ -114,7 +114,7 @@ object Form1: TForm1
       item
         Position = 1
         Text = #1058#1080#1087' '#1092#1072#1081#1083#1072
-        Width = 112
+        Width = 113
       end>
   end
   object FSReadingMode: TRadioGroup
